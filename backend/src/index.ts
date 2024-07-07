@@ -5,6 +5,7 @@ import bcrypt from "bcrypt-ts";
 import { sign, verify } from "hono/jwt";
 import { userRouter } from "./routes/user";
 import { blogRouter } from "./routes/blog";
+import { cors } from "hono/cors";
 
 const app = new Hono<{
   Bindings: {
@@ -15,7 +16,7 @@ const app = new Hono<{
     userId: string;
   };
 }>().basePath("/api/v1");
-
+app.use('/*', cors())
 app.route('/user', userRouter)
 app.route('/blog', blogRouter)
 
