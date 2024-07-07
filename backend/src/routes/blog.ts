@@ -75,7 +75,7 @@ blogRouter.put("/", async (c) => {
       error: "Invalid input",
     });
   }
-  
+
   const blog = await prisma.post.update({
     where: {
       id: body.id,
@@ -96,7 +96,18 @@ blogRouter.get("/bulk", async (c) => {
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const blogs = await prisma.post.findMany();
+  const blogs = await prisma.post.findMany({
+    select: {
+      content: true,
+      title: true,
+      id: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
 
   return c.json({
     blogs,
